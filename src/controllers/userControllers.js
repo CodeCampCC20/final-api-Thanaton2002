@@ -1,6 +1,6 @@
 import { findUser } from "../services/authServices.js"
 import { hashService } from "../services/hashServices.js"
-import { findUserById, updateUserById } from "../services/userService.js"
+import { findUserById, postRecords, updateUserById } from "../services/userService.js"
 import createError from "../utils/createError.js"
 
 export const getUser = async (req, res, next) => {
@@ -31,7 +31,7 @@ export const updateUser = async (req, res, next) => {
 
     const isExist = await findUser(username)
 
-    if (isExist) { 
+    if (isExist) {
       createError(400, "Username already exist.")
     }
 
@@ -45,6 +45,30 @@ export const updateUser = async (req, res, next) => {
       id: user.id,
       username: user.username
     })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const createRecords = async (req, res, next) => {
+  try {
+    const { type, value } = req.body
+    const { id } = req.user
+
+    if (!type || !value) {
+      createError(400, "Type or Value is missing.")
+    }
+
+    const data = {
+      type,
+      value,
+      userId: id
+    }
+
+    const result = await postRecords(data)
+    console.log('result', result)
+
+    res.json({ "message": "create health record successfully" })
   } catch (error) {
     next(error)
   }

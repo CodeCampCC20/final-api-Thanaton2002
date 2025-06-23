@@ -24,3 +24,7 @@ export const updateUserById = async (id, username, password) => {
   })
   return user
 }
+
+export const postRecords = async (data) => {
+  return await prisma.healthRecord.create({data : data})
+}
