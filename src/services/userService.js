@@ -64,3 +64,17 @@ export const findRecordByRecordId = async (userId, recordId) => {
   })
   return record
 }
+
+export const updateRecordById = async (recordId, userId, data) => {
+  const record = await prisma.healthRecord.update({
+    where: {
+      id: Number(recordId),
+      userId: Number(userId)
+    },
+    data: {
+      type: data.type,
+      value: data.value
+    }
+  })
+  return record
+}
