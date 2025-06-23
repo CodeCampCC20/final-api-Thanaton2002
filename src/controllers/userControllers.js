@@ -1,6 +1,6 @@
 import { findUser } from "../services/authServices.js"
 import { hashService } from "../services/hashServices.js"
-import { findRecordByRecordId, findRecordByUserId, findUserById, postRecords, updateUserById } from "../services/userService.js"
+import { findRecordByDateRange, findRecordByRecordId, findRecordByUserId, findUserById, postRecords, updateUserById } from "../services/userService.js"
 import createError from "../utils/createError.js"
 
 export const getUser = async (req, res, next) => {
@@ -77,10 +77,20 @@ export const createRecords = async (req, res, next) => {
 export const getRecords = async (req, res, next) => {
   try {
     const { id } = req.user
+    const { from, to } = req.query
 
-    const records = await findRecordByUserId(id)
+    if (from && to) {
+      const start = new Date(from)
+      const end = new Date(to)
+      
+      const recordRange = await findRecordByDateRange(id, start, end)
+      res.json({ userRecords: recordRange })
 
-    res.json({ userRecords: records })
+    } else {
+      const records = await findRecordByUserId(id)
+      res.json({ userRecords: records })
+
+    }
 
   } catch (error) {
     next(error)
@@ -89,7 +99,7 @@ export const getRecords = async (req, res, next) => {
 
 export const getRecordById = async (req, res, next) => {
   try {
-    const { id : recordId } = req.params
+    const { id: recordId } = req.params
     const { id } = req.user
 
     const records = await findRecordByRecordId(id, recordId)

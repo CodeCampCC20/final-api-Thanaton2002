@@ -1,8 +1,9 @@
+import { date } from "yup"
 import prisma from "../config/prisma.js"
 
 export const findUserById = async (id) => {
   const user = await prisma.user.findFirst({
-    where : {
+    where: {
       id: Number(id)
     },
     omit: {
@@ -15,7 +16,7 @@ export const findUserById = async (id) => {
 
 export const updateUserById = async (id, username, password) => {
   const user = await prisma.user.update({
-    where : {
+    where: {
       id: Number(id)
     },
     data: {
@@ -28,14 +29,27 @@ export const updateUserById = async (id, username, password) => {
 
 
 export const postRecords = async (data) => {
-  return await prisma.healthRecord.create({data : data})
+  return await prisma.healthRecord.create({ data: data })
 }
 
 
 export const findRecordByUserId = async (id) => {
   const records = await prisma.healthRecord.findMany({
-    where : {
+    where: {
       userId: Number(id)
+    }
+  })
+  return records
+}
+
+export const findRecordByDateRange = async (id, start, end) => {
+  const records = await prisma.healthRecord.findMany({
+    where: {
+      userId: Number(id),
+      date: {
+        gte : start,
+        lte: end
+      }
     }
   })
   return records
@@ -43,7 +57,7 @@ export const findRecordByUserId = async (id) => {
 
 export const findRecordByRecordId = async (userId, recordId) => {
   const record = await prisma.healthRecord.findMany({
-    where : {
+    where: {
       userId: Number(userId),
       id: Number(recordId)
     }
