@@ -33,10 +33,16 @@ export const authCheckDoctor = (req, res, next) => {
     }
 
     const token = header.split(" ")[1]
-    const verifyToken = verifyTokenUser
 
+    jwt.verify(token, process.env.SECRET_DOCTOR, (error, decode) => {
+      if (error) {
+        createError(401, "Token is invalid.")
+      }
+      req.user = decode
+      next()
+    })
 
   } catch (error) {
-
+    next(error)
   }
 }

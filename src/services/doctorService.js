@@ -1,6 +1,6 @@
 import prisma from "../config/prisma.js"
 
-export const findUserById = async (id) => {
+export const findDoctorById = async (id) => {
   const user = await prisma.doctor.findFirst({
     where : {
       id: Number(id)
@@ -12,7 +12,7 @@ export const findUserById = async (id) => {
   return user
 }
 
-export const updateUserById = async (id, username, password, specialization) => {
+export const updateDoctorById = async (id, username, password, specialization) => {
   const user = await prisma.doctor.update({
     where : {
       id: Number(id)

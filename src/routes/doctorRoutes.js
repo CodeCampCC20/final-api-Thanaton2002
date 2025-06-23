@@ -1,9 +1,11 @@
 import express from "express"
+import { authCheckDoctor } from "../middlewares/authCheckMiddlewares.js"
+import { getDoctor, updateDoctor } from "../controllers/doctorControllers.js"
 
 
 const doctorRoutes = express.Router()
 
-// userRoutes.get("/me", authCheckUser, getUser)
-// userRoutes.patch("/me",authCheckUser, updateUser)
+doctorRoutes.get("/me", authCheckDoctor, getDoctor)
+doctorRoutes.patch("/me", authCheckDoctor, updateDoctor)
 
 export default doctorRoutes
