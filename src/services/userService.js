@@ -12,6 +12,7 @@ export const findUserById = async (id) => {
   return user
 }
 
+
 export const updateUserById = async (id, username, password) => {
   const user = await prisma.user.update({
     where : {
@@ -25,6 +26,27 @@ export const updateUserById = async (id, username, password) => {
   return user
 }
 
+
 export const postRecords = async (data) => {
   return await prisma.healthRecord.create({data : data})
+}
+
+
+export const findRecordByUserId = async (id) => {
+  const records = await prisma.healthRecord.findMany({
+    where : {
+      userId: Number(id)
+    }
+  })
+  return records
+}
+
+export const findRecordByRecordId = async (userId, recordId) => {
+  const record = await prisma.healthRecord.findMany({
+    where : {
+      userId: Number(userId),
+      id: Number(recordId)
+    }
+  })
+  return record
 }

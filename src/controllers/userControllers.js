@@ -1,6 +1,6 @@
 import { findUser } from "../services/authServices.js"
 import { hashService } from "../services/hashServices.js"
-import { findUserById, postRecords, updateUserById } from "../services/userService.js"
+import { findRecordByRecordId, findRecordByUserId, findUserById, postRecords, updateUserById } from "../services/userService.js"
 import createError from "../utils/createError.js"
 
 export const getUser = async (req, res, next) => {
@@ -69,6 +69,33 @@ export const createRecords = async (req, res, next) => {
     console.log('result', result)
 
     res.json({ "message": "create health record successfully" })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getRecords = async (req, res, next) => {
+  try {
+    const { id } = req.user
+
+    const records = await findRecordByUserId(id)
+
+    res.json({ userRecords: records })
+
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getRecordById = async (req, res, next) => {
+  try {
+    const { id : recordId } = req.params
+    const { id } = req.user
+
+    const records = await findRecordByRecordId(id, recordId)
+
+    res.json({ userRecords: records })
+
   } catch (error) {
     next(error)
   }

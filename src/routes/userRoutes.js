@@ -1,6 +1,6 @@
 import express from "express"
 import { authCheckUser } from "../middlewares/authCheckMiddlewares.js"
-import { createRecords, getUser, updateUser } from "../controllers/userControllers.js"
+import { createRecords, getRecordById, getRecords, getUser, updateUser } from "../controllers/userControllers.js"
 
 const userRoutes = express.Router()
 
@@ -10,5 +10,7 @@ userRoutes.patch("/me",authCheckUser, updateUser)
 
 //Health Records
 userRoutes.post("/health-records",authCheckUser, createRecords)
+userRoutes.get("/health-records",authCheckUser, getRecords)
+userRoutes.get("/health-records/:id",authCheckUser, getRecordById)
 
 export default userRoutes
